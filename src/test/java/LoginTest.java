@@ -1,51 +1,44 @@
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+package tests;
+
+import models.User;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.TimeUnit;
-
-public class LoginTest extends BaseTest{
-
-
-
-@Test
-    public void loginPositiveTest(){
-//        //open login/RegForm
-//    WebElement loginBth = wd.findElement(By.xpath("//*[text()='LOGIN']"));
-//    loginBth.click();
-//    //fill Login/RegForm
-//    WebElement emailInput= wd.findElement(By.xpath("//input[1]"));
-//    emailInput.click();
-//    emailInput.clear();
-//    emailInput.sendKeys("mama@gmail.com");
-//
-//    WebElement passwordInput = wd.findElement(By.xpath("//input[2]"));
-//    passwordInput.click();
-//    passwordInput.clear();
-//    passwordInput.sendKeys("Nmama12345$");
-//
-//    //click login Button
-//    wd.findElement(By.xpath("//button[1]")).click();
-//
-//    //Assert if button Logout is
-//
-//
-//    Assert.assertTrue(wd.findElements(By.xpath("//button[text()='Sign Out']")).size()>0);
-//
-//}
+public class LoginTest extends TestBase {
+    @BeforeMethod(alwaysRun = true)
+    public void preCondition(){
+        if(app.getUser().isLogged()){
+            app.getUser().logout();
+        }
+    }
 
 
+    @Test (groups = {"web"})
+    public void loginTest() {
+        String email = "noa@gmail.com";
+        String password = "Nnoa12345$";
+        System.out.println( email +"   "+password);
+        app.getUser().openLoginRegistrationForm();
+        app.getUser().fillLoginRegistrationForm(email, password);
+        app.getUser().submitLogin();
+        app.getUser().pause(100);
+        Assert.assertTrue(app.getUser().isLogged());
 
+    }
+    @Test
+    public void loginTestModel() {
+        String email = "noa@gmail.com";
+        String password = "Nnoa12345$";
+        User user = new User().withEmail(email).withPassword(password);
 
+        app.getUser().openLoginRegistrationForm();
+        app.getUser().fillLoginRegistrationForm(user);
+        app.getUser().submitLogin();
+        app.getUser().pause(100);
+        Assert.assertTrue(app.getUser().isLogged());
 
-
-
-
+    }
 
 
 }
